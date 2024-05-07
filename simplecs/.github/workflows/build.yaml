@@ -15,7 +15,6 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Build .NET application
-    
       run: dotnet build --configuration Release simplecs/simplecs.csproj
 
     - name: Publish .NET application
