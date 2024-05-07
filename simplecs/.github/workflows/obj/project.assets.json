@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\aindi\\OneDrive - Barracuda Networks, Inc\\Desktop\\Gitaction_doc\\simplecs\\simplecs.csproj",
+      "projectUniqueName": "C:\\Users\\aindi\\OneDrive - Barracuda Networks, Inc\\Desktop\\Gitaction_doc\\simplecs\\.github\\workflows\\simplecs.csproj",
       "projectName": "simplecs",
-      "projectPath": "C:\\Users\\aindi\\OneDrive - Barracuda Networks, Inc\\Desktop\\Gitaction_doc\\simplecs\\simplecs.csproj",
+      "projectPath": "C:\\Users\\aindi\\OneDrive - Barracuda Networks, Inc\\Desktop\\Gitaction_doc\\simplecs\\.github\\workflows\\simplecs.csproj",
       "packagesPath": "C:\\Users\\aindi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\aindi\\OneDrive - Barracuda Networks, Inc\\Desktop\\Gitaction_doc\\simplecs\\obj\\",
+      "outputPath": "C:\\Users\\aindi\\OneDrive - Barracuda Networks, Inc\\Desktop\\Gitaction_doc\\simplecs\\.github\\workflows\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\aindi\\AppData\\Roaming\\NuGet\\NuGet.Config",

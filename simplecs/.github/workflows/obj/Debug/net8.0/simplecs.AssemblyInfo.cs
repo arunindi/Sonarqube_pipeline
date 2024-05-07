@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("simplecs")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c1ef7f5997cd37648fa7741f798733e25706393")]
 [assembly: System.Reflection.AssemblyProductAttribute("simplecs")]
 [assembly: System.Reflection.AssemblyTitleAttribute("simplecs")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
