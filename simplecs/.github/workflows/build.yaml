@@ -32,3 +32,4 @@ jobs:
 
     - name: Push Docker image
       run: docker push aindi123/simplecs:1.0.RELEASE
+#finis
