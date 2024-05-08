@@ -28,7 +28,7 @@ jobs:
       run: docker build -t aindi123/simplecs:1.0.RELEASE -f simplecs/Dockerfile .
 
     - name: Log in to DockerHub
-      run: docker login -u ${{ secrets.aindi123 }} -p ${{ secrets.dckr_pat_AhNdDxGeIDVyDVvyXsHYkmVp3fw }}
+      run: docker login -u aindi123 -p dckr_pat_AhNdDxGeIDVyDVvyXsHYkmVp3fw
 
     - name: Push Docker image
       run: docker push aindi123/simplecs:1.0.RELEASE
