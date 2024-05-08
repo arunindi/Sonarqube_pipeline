@@ -9,7 +9,7 @@ COPY simplecs/simplecs.csproj ./
 RUN dotnet restore
 
 # Copy the remaining source code
-COPY simplecs/.
+COPY simplecs/. /app/
 
 # Build the application
 RUN dotnet publish -c Release -o out
