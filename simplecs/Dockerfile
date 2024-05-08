@@ -5,11 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
 # Copy the .csproj file and restore dependencies
-COPY *.csproj ./
+COPY simplecs/simplecs.csproj ./
 RUN dotnet restore
 
 # Copy the remaining source code
-COPY . ./
+COPY simplecs/.
 
 # Build the application
 RUN dotnet publish -c Release -o out
