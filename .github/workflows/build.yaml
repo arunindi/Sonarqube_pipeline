@@ -25,7 +25,7 @@ jobs:
       uses: docker/setup-buildx-action@v1
 
     - name: Build Docker image
-      run: docker build -t aindi123/simplecs:1.0.RELEASE .
+      run: docker build -t aindi123/simplecs:1.0.RELEASE -f simplecs/Dockerfile .
 
     - name: Log in to DockerHub
       run: docker login -u ${{ secrets.aindi123 }} -p ${{ secrets.dckr_pat_AhNdDxGeIDVyDVvyXsHYkmVp3fw }}
