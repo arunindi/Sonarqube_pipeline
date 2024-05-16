@@ -62,6 +62,9 @@ jobs:
       run: |
         mkdir -p .sonar/scanner
         dotnet tool install --global dotnet-sonarscanner
+        
+    - name: Install SonarScanner for .NET tool
+      run: dotnet tool install --global dotnet-sonarscanner
 
     - name: Add dotnet tools to PATH
       shell: bash
