@@ -71,7 +71,7 @@ jobs:
       shell: pwsh
       run: |
         dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
-        dotnet build
+        dotnet build --configuration Release simplecs/simplecs.csproj
         dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
 
