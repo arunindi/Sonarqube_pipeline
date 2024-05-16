@@ -1,13 +1,12 @@
-name: Build and Push Docker Image
+name: Build, Push Docker Image, and Analyze with SonarQube
 
 on:
   push:
     branches:
       - main
-  # You can add additional triggers here, such as pull requests
 
 jobs:
-  build-and-push:
+  build-push-and-analyze:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +19,6 @@ jobs:
     - name: Publish .NET application
       run: dotnet publish --configuration Release simplecs/simplecs.csproj -o ./published
 
-
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -32,3 +30,18 @@ jobs:
 
     - name: Push Docker image
       run: docker push aindi123/simplecs:1.0.RELEASE
+
+    - name: Download SonarQube Scanner
+      run: |
+        sudo apt-get install unzip
+        curl -sSLo /tmp/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+        unzip -qq /tmp/sonar-scanner-cli.zip -d /tmp
+
+    - name: Analyze with SonarQube
+      run: |
+        /tmp/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
+        -Dsonar.projectKey=Git_Action
+        -Dsonar.sources=simplecs \
+        -Dsonar.host.url=http://localhost:9000 \
+        -Dsonar.login=sqp_fde26c2790215dba75262c1e87c9b73749242971
+
