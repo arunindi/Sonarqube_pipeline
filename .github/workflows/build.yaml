@@ -66,6 +66,9 @@ jobs:
     - name: Add dotnet tools to PATH
       shell: bash
       run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+      
+    - name: Check installed .NET Core tools
+      run: dotnet tool list --global
 
     - name: Build and analyze
       shell: pwsh
