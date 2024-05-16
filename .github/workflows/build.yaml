@@ -31,17 +31,37 @@ jobs:
     - name: Push Docker image
       run: docker push aindi123/simplecs:1.0.RELEASE
 
-    - name: Download SonarQube Scanner
+    - name: Build Sonarqube
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+    - name: Set up JDK 17
+      uses: actions/setup-java@v1
+      with:
+        java-version: 17
+    - name: Cache SonarQube packages
+      uses: actions/cache@v1
+      with:
+        path: ~\.sonar\cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+    - name: Cache SonarQube scanner
+      id: cache-sonar-scanner
+      uses: actions/cache@v1
+      with:
+        path: .\.sonar\scanner
+        key: ${{ runner.os }}-sonar-scanner
+        restore-keys: ${{ runner.os }}-sonar-scanner
+    - name: Install SonarQube scanner
+      if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+      shell: pwsh
       run: |
-        sudo apt-get install unzip
-        curl -sSLo /tmp/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-        unzip -qq /tmp/sonar-scanner-cli.zip -d /tmp
-
-    - name: Analyze with SonarQube
+         New-Item -Path .\.sonar\scanner -ItemType Directory
+         dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+    - name: Build and analyze
+      shell: pwsh
       run: |
-        /tmp/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-        -Dsonar.projectKey=Git_Action
-        -Dsonar.sources=simplecs \
-        -Dsonar.host.url=http://localhost:9000 \
-        -Dsonar.login=sqp_fde26c2790215dba75262c1e87c9b73749242971
+         .\.sonar\scanner\dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
+         dotnet build
+         .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
