@@ -31,10 +31,6 @@ jobs:
     - name: Push Docker image
       run: docker push aindi123/simplecs:1.0.RELEASE
       
-  Sonarqube-analyse:
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Checkout code
       uses: actions/checkout@v2
       with:
