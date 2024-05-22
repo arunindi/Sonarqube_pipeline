@@ -1,0 +1,83 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  DOTNET_ROOT: $(HOME)/.dotnet
+  PATH: $(DOTNET_ROOT)/tools:$(PATH)
+
+jobs:
+- job: BuildAndPublish
+  displayName: 'Build, Push Docker Image, and Analyze with SonarQube'
+
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '5.x' # Adjust this to your .NET version
+      installationPath: $(DOTNET_ROOT)
+
+  - checkout: self
+
+  - script: |
+      dotnet build --configuration Release simplecs/simplecs.csproj
+    displayName: 'Build .NET application'
+
+  - script: |
+      dotnet publish --configuration Release simplecs/simplecs.csproj -o ./published
+    displayName: 'Publish .NET application'
+
+  - task: DockerInstaller@0
+    displayName: 'Install Docker'
+
+  - script: |
+      docker build -t aindi123/simplecs:1.0.RELEASE -f simplecs/Dockerfile .
+    displayName: 'Build Docker image'
+
+  - script: |
+      echo $(DOCKERHUB_PASSWORD) | docker login -u $(DOCKERHUB_USERNAME) --password-stdin
+    displayName: 'Log in to DockerHub'
+
+  - script: |
+      docker push aindi123/simplecs:1.0.RELEASE
+    displayName: 'Push Docker image'
+
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+    displayName: 'Set up JDK 17'
+
+  - task: Cache@2
+    inputs:
+      key: 'sonar | "$(Agent.OS)" | sonar'
+      path: $(HOME)/.sonar/cache
+    displayName: 'Cache SonarQube packages'
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'tool'
+      command: 'install'
+      toolName: 'dotnet-sonarscanner'
+    displayName: 'Install SonarScanner for .NET tool'
+
+  - script: |
+      dotnet tool install --global dotnet-sonarscanner
+    displayName: 'Install SonarScanner for .NET tool (again)'
+
+  - script: |
+      echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+    displayName: 'Add dotnet tools to PATH'
+
+  - script: |
+      dotnet tool list --global
+    displayName: 'Check installed .NET Core tools'
+
+  - script: |
+      dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
+      dotnet build --configuration Release simplecs/simplecs.csproj
+      dotnet-sonarscanner end /d:sonar.token="$(SONAR_TOKEN)"
+    displayName: 'Build and analyze'
