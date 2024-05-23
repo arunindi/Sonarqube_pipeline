@@ -64,6 +64,7 @@ jobs:
     inputs:
       versionSpec: '17'
       jdkArchitectureOption: 'x64' # Specify the architecture for the JDK
+      jdkSourceOption: 'PreInstalled' # Specify the source of the JDK
     displayName: 'Set up JDK 17'
 
   - task: Cache@2
