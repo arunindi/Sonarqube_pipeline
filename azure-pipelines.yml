@@ -27,8 +27,13 @@ jobs:
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '8.x' # Use .NET SDK 8.0
+      version: '8.0.x' # Ensure the use of .NET SDK 8.0.x
       installationPath: $(DOTNET_ROOT)
+
+  - script: |
+      echo "Verifying installed .NET SDK versions"
+      dotnet --list-sdks
+    displayName: 'Verify .NET SDK versions'
 
   - checkout: self
 
