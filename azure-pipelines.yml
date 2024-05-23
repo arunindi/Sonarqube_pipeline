@@ -9,7 +9,6 @@ pool:
 variables:
   DOTNET_ROOT: $(HOME)/.dotnet
   DOTNET_TOOLS: $(DOTNET_ROOT)/tools
-  PATH: $(DOTNET_TOOLS):$(PATH)
 
 jobs:
 - job: BuildAndPublish
@@ -18,31 +17,32 @@ jobs:
   steps:
   - script: |
       echo "Checking for bash..."
-      which bash
+      which bash || echo "bash not found in PATH"
       echo "Bash version:"
-      bash --version
+      bash --version || echo "bash not executable"
       echo "Initial PATH: $PATH"
     displayName: 'Check for bash and PATH'
 
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '8.0.x' # Ensure the use of .NET SDK 8.0.x
+      version: '8.0.x' # Use .NET SDK 8.0.x
       installationPath: $(DOTNET_ROOT)
 
   - script: |
       echo "Verifying installed .NET SDK versions"
-      dotnet --list-sdks
+      $(DOTNET_ROOT)/dotnet --list-sdks
+      echo "Updated PATH: $PATH"
     displayName: 'Verify .NET SDK versions'
 
   - checkout: self
 
   - script: |
-      dotnet build --configuration Release simplecs/simplecs.csproj
+      $(DOTNET_ROOT)/dotnet build --configuration Release simplecs/simplecs.csproj
     displayName: 'Build .NET application'
 
   - script: |
-      dotnet publish --configuration Release simplecs/simplecs.csproj -o ./published
+      $(DOTNET_ROOT)/dotnet publish --configuration Release simplecs/simplecs.csproj -o ./published
     displayName: 'Publish .NET application'
 
   - task: DockerInstaller@0
@@ -79,7 +79,7 @@ jobs:
     displayName: 'Install SonarScanner for .NET tool'
 
   - script: |
-      dotnet tool install --global dotnet-sonarscanner
+      $(DOTNET_ROOT)/dotnet tool install --global dotnet-sonarscanner
     displayName: 'Install SonarScanner for .NET tool (again)'
 
   - script: |
@@ -87,11 +87,11 @@ jobs:
     displayName: 'Add dotnet tools to PATH'
 
   - script: |
-      dotnet tool list --global
+      $(DOTNET_ROOT)/dotnet tool list --global
     displayName: 'Check installed .NET Core tools'
 
   - script: |
-      dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
-      dotnet build --configuration Release simplecs/simplecs.csproj
-      dotnet-sonarscanner end /d:sonar.token="$(SONAR_TOKEN)"
+      $(DOTNET_ROOT)/dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
+      $(DOTNET_ROOT)/dotnet build --configuration Release simplecs/simplecs.csproj
+      $(DOTNET_ROOT)/dotnet-sonarscanner end /d:sonar.token="$(SONAR_TOKEN)"
     displayName: 'Build and analyze'
