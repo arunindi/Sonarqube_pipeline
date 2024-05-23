@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 Console.WriteLine("Hello, World!");
-private static void PrintMessage() 
+while(true)
 {
-    Console.WriteLine("Duplicate line.");
-    Console.WriteLine("Duplicate line.");
+    Console.WriteLine("Hello, World!");
 }
