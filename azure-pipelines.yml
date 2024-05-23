@@ -8,18 +8,33 @@ pool:
 
 variables:
   DOTNET_ROOT: $(HOME)/.dotnet
-  PATH: $(DOTNET_ROOT)/tools:$(PATH)
+  DOTNET_TOOLS: $(DOTNET_ROOT)/tools
 
 jobs:
 - job: BuildAndPublish
   displayName: 'Build, Push Docker Image, and Analyze with SonarQube'
 
   steps:
+  - script: |
+      echo "Checking for bash..."
+      which bash
+      echo "Bash version:"
+      bash --version
+      echo "Initial PATH: $PATH"
+    displayName: 'Check for bash and PATH'
+
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
       version: '5.x' # Adjust this to your .NET version
       installationPath: $(DOTNET_ROOT)
+
+  - script: |
+      echo "Updating PATH to include .NET tools"
+      echo "$(DOTNET_TOOLS):$(PATH)" > /tmp/path.txt
+      source /tmp/path.txt
+      echo "Updated PATH: $PATH"
+    displayName: 'Update PATH variable'
 
   - checkout: self
 
