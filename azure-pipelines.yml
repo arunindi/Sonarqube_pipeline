@@ -85,7 +85,9 @@ jobs:
     displayName: 'Install SonarScanner for .NET tool (again)'
 
   - script: |
-      echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+      echo "Adding .dotnet/tools to PATH..."
+      export PATH="$HOME/.dotnet/tools:$PATH"
+      echo "Updated PATH: $PATH"
     displayName: 'Add dotnet tools to PATH'
 
   - script: |
