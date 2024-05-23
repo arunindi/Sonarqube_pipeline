@@ -95,6 +95,13 @@ jobs:
     displayName: 'Check installed .NET Core tools'
 
   - script: |
+      echo "Checking dotnet-sonarscanner tool path..."
+      tool_path=$(command -v dotnet-sonarscanner)
+      echo "dotnet-sonarscanner tool path: $tool_path"
+    displayName: 'Check dotnet-sonarscanner tool path'
+
+
+  - script: |
       $(DOTNET_ROOT)/dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
       $(DOTNET_ROOT)/dotnet build --configuration Release simplecs/simplecs.csproj
       $(DOTNET_ROOT)/dotnet-sonarscanner end /d:sonar.token="$(SONAR_TOKEN)"
