@@ -9,6 +9,7 @@ pool:
 variables:
   DOTNET_ROOT: $(HOME)/.dotnet
   DOTNET_TOOLS: $(DOTNET_ROOT)/tools
+  PATH: $(DOTNET_TOOLS):$(PATH)
 
 jobs:
 - job: BuildAndPublish
@@ -26,15 +27,8 @@ jobs:
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '5.x' # Adjust this to your .NET version
+      version: '8.x' # Use .NET SDK 8.0
       installationPath: $(DOTNET_ROOT)
-
-  - script: |
-      echo "Updating PATH to include .NET tools"
-      echo "$(DOTNET_TOOLS):$(PATH)" > /tmp/path.txt
-      source /tmp/path.txt
-      echo "Updated PATH: $PATH"
-    displayName: 'Update PATH variable'
 
   - checkout: self
 
