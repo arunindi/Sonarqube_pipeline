@@ -102,7 +102,16 @@ jobs:
 
 
   - script: |
-      $(DOTNET_ROOT)/dotnet-sonarscanner begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
-      $(DOTNET_ROOT)/dotnet build --configuration Release simplecs/simplecs.csproj
-      $(DOTNET_ROOT)/dotnet-sonarscanner end /d:sonar.token="$(SONAR_TOKEN)"
+      echo "Checking dotnet-sonarscanner tool path..."
+      tool_path=$(command -v dotnet-sonarscanner)
+      echo "dotnet-sonarscanner tool path: $tool_path"
+      if [ -x "$tool_path" ]; then
+          echo "dotnet-sonarscanner found. Proceeding with analysis..."
+          $tool_path begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
+          $(DOTNET_ROOT)/dotnet build --configuration Release simplecs/simplecs.csproj
+          $tool_path end /d:sonar.token="$(SONAR_TOKEN)"
+      else
+          echo "ERROR: dotnet-sonarscanner tool not found. Aborting analysis."
+          exit 1
+      fi
     displayName: 'Build and analyze'
