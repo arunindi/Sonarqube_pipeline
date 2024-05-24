@@ -98,13 +98,6 @@ jobs:
       echo "Checking dotnet-sonarscanner tool path..."
       tool_path=$(command -v dotnet-sonarscanner)
       echo "dotnet-sonarscanner tool path: $tool_path"
-    displayName: 'Check dotnet-sonarscanner tool path'
-
-
-  - script: |
-      echo "Checking dotnet-sonarscanner tool path..."
-      tool_path=$(command -v dotnet-sonarscanner)
-      echo "dotnet-sonarscanner tool path: $tool_path"
       if [ -x "$tool_path" ]; then
           echo "dotnet-sonarscanner found. Proceeding with analysis..."
           $tool_path begin /k:"Git_Action" /d:sonar.token="$(SONAR_TOKEN)" /d:sonar.host.url="$(SONAR_HOST_URL)"
